@@ -13,7 +13,16 @@ object Main {
   /**
    * Exercise 1
    */
-    def pascal(c: Int, r: Int): Int = ???
+    def pascal(c: Int, r: Int): Int = {
+
+      def isEdge(): Boolean =
+        c == 0 || c == r
+
+      if(isEdge())
+        1
+      else
+        pascal(c-1, r-1) + pascal(c, r-1)
+    }
   
   /**
    * Exercise 2
