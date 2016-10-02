@@ -27,10 +27,36 @@ object Main {
   /**
    * Exercise 2
    */
-    def balance(chars: List[Char]): Boolean = ???
+    def balance(chars: List[Char]): Boolean = {
+
+      def loop(balance: Int, chars: List[Char]): Boolean =
+
+        if(chars.isEmpty)
+          balance == 0
+
+        else {
+          if (balance < 0)
+            return false
+
+          chars.head match {
+            case '(' => loop(balance + 1, chars.tail) // matched opening parenthesis, add positive balance
+            case ')' => loop(balance - 1, chars.tail) // matched opening parenthesis, add negative balance
+            case _ => loop(balance, chars.tail) // no parenthesis, no need ta adjust balance
+          }
+        }
+
+      loop(0, chars)
+    }
   
   /**
    * Exercise 3
    */
-    def countChange(money: Int, coins: List[Int]): Int = ???
+    def countChange(money: Int, coins: List[Int]): Int = {
+
+      if(money == 0)
+        1
+      else if(coins.isEmpty || money < 0)
+        0
+      else countChange(money, coins.tail) + countChange(money - coins.head, coins)
+    }
   }
