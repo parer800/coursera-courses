@@ -146,6 +146,39 @@ class FunSetSuite extends FunSuite {
       assert(!contains(filteredSubset, 0), "0 fulfills filter condition but is not within range1")
     }
   }
+  test("test if all values in a set condition matches a condition") {
+    new TestSets {
+      val positiveCondition: Int => Boolean = x => x >= 0
+      val forAllResult = forall(range1, positiveCondition)
 
+      val evenCondition: Int => Boolean = (x => x % 2 == 0)
+      val largeRange: Set = x => -bound < x && x < bound
+      val largeEvenRange: Set = x => -bound < x && x < bound && evenCondition(x)
+
+
+      assert(forall(largeEvenRange, evenCondition), "even numbers are matched")
+      assert(!forall(largeRange, evenCondition), "should only match even numbers")
+      assert(forAllResult, "1 is within range1 and fulfills filter condition")
+    }
+  }
+  test("test if values matching a condition exists in a set") {
+
+    assert(!exists(singletonSet(-1001), x => x < 0), "value doesn't exist no match")
+    assert(exists(singletonSet(-100), x => x < 0), "value matching condition")
+    assert(!exists(singletonSet(-100), x => x > 0), "value not matching condition")
+
+  }
+
+  test("test map of set") {
+    new TestSets {
+
+      val expectedResultString = "{2,4,6,8,10,12,14,16,18}"
+      val mappedResult = map(range1, x => x * 2)
+
+      val actualResultString = FunSets.toString(mappedResult)
+      assert(expectedResultString == actualResultString, "map should double each element")
+
+    }
+  }
 
 }
