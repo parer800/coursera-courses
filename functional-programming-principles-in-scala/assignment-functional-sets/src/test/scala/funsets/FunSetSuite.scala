@@ -77,6 +77,8 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    val range1: Set = x => x > 0 && x < 10
+    val range2: Set = x => x > 5 && x < 15
   }
 
   /**
@@ -103,10 +105,45 @@ class FunSetSuite extends FunSuite {
 
   test("union contains all elements of each set") {
     new TestSets {
-      val s = union(s1, s2)
-      assert(contains(s, 1), "Union 1")
-      assert(contains(s, 2), "Union 2")
-      assert(!contains(s, 3), "Union 3")
+      val union1 = union(s1, s2)
+      val union2 = union(range1, range2)
+      assert(contains(union1, 1), "Union 1")
+      assert(contains(union1, 2), "Union 2")
+      assert(!contains(union1, 3), "Union 3")
+
+      assert(contains(union2, 1), "1 is within the union")
+      assert(contains(union2, 3), "3 is within the union")
+      assert(contains(union2, 5), "5 is within the union")
+      assert(contains(union2, 9), "9 is within the union")
+      assert(contains(union2, 10), "10 is within the union")
+      assert(contains(union2, 14), "14 is within the union")
+      assert(!contains(union2, 0), "0 is outside the union")
+      assert(!contains(union2, 15), "15 is outside the union")
+    }
+  }
+  test("intersection contains all elements shared by each set") {
+    new TestSets {
+      val intersection1 = intersect(s1, s1)
+      val intersection2 = intersect(range1, range2)
+      assert(contains(intersection1, 1), "Intersection 1")
+      assert(!contains(intersection1, 2), "Intersection 2")
+
+      assert(contains(intersection2, 6), "6 is within range1 and range2")
+      assert(!contains(intersection2, 5), "5 is within range1 but not range2")
+      assert(!contains(intersection2, 10), "10 is within range2 but not range1")
+
+
+    }
+  }
+  test("filter the subset of one set according to a set condition") {
+    new TestSets {
+      val condition: Int => Boolean = x => x <= 5
+      val filteredSubset = filter(range1, condition)
+
+      assert(contains(filteredSubset, 1), "1 is within range1 and fulfills filter condition")
+      assert(contains(filteredSubset, 5), "5 is within range1 and fulfills filter condition")
+      assert(!contains(filteredSubset, 6), "6 is within range1 but doesn't fulfill filter condition")
+      assert(!contains(filteredSubset, 0), "0 fulfills filter condition but is not within range1")
     }
   }
 
