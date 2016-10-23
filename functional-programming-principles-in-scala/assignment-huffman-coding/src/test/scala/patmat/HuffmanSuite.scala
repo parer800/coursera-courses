@@ -21,10 +21,22 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("weight of a leaf") {
+    new TestTrees {
+      assert(weight(t1.left) === 2)
+    }
+  }
+
 
   test("chars of a larger tree") {
     new TestTrees {
       assert(chars(t2) === List('a','b','d'))
+    }
+  }
+
+  test("chars of a leaf") {
+    new TestTrees {
+      assert(chars(t2.right) === List('d'))
     }
   }
 
